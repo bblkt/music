@@ -5,11 +5,12 @@ import aiofiles
 import aiohttp
 from PIL import Image, ImageDraw, ImageEnhance, ImageFilter, ImageFont
 from unidecode import unidecode
-from youtubesearchpython.__future__ import VideosSearch
 
 from ZeMusic import app
 from config import YOUTUBE_IMG_URL
 
+# رابط الصوره
+YOUTUBE_IMG = "https://telegra.ph/file/9df8eb022f09cbb58a361.jpg"
 
 def changeImageSize(maxWidth, maxHeight, image):
     widthRatio = maxWidth / image.size[0]
@@ -30,12 +31,13 @@ def clear(text):
 
 
 async def get_thumb(videoid):
+    return YOUTUBE_IMG
+    
     if os.path.isfile(f"cache/{videoid}.png"):
         return f"cache/{videoid}.png"
 
     url = f"https://www.youtube.com/watch?v={videoid}"
     try:
-        results = VideosSearch(url, limit=1)
         for result in (await results.next())["result"]:
             try:
                 title = result["title"]
@@ -118,4 +120,4 @@ async def get_thumb(videoid):
         return f"cache/{videoid}.png"
     except Exception as e:
         print(e)
-        return YOUTUBE_IMG_URL
+        return YOUTUBE_IMG
