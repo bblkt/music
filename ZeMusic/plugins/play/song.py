@@ -22,7 +22,7 @@ Nem = config.BOT_NAME + " ابحث"
 @app.on_message(command(["song","/song", "بحث",Nem]))
 async def song_downloader(client, message: Message):
     query = " ".join(message.command[1:])
-    m = await message.reply_text("<b>↠ ابشرالحين ابحث لك طلبك . . .</b>")
+    m = await message.reply_text("<b>«- جـارِ البحث عـن المقطـع الصـوتـي . . .</b>")
     ydl_ops = {
         'format': 'bestaudio[ext=m4a]',
         'keepvideo': True,
@@ -45,19 +45,19 @@ async def song_downloader(client, message: Message):
         await m.edit("- لم يتم العثـور على نتائج ؟!\n- حـاول مجـدداً . . .")
         print(str(e))
         return
-    await m.edit("<b>↢ ابشر الحين احملها ▬▭ . . .</b>")
+    await m.edit("<b>⇜ جـارِ التحميل ▬▭ . . .</b>")
     try:
         with yt_dlp.YoutubeDL(ydl_ops) as ydl:
             info_dict = ydl.extract_info(link, download=False)
             audio_file = ydl.prepare_filename(info_dict)
             ydl.process_info(info_dict)
-        rep = f"↠ @{app.username} "
+        rep = f"-› @{app.username} "
         host = str(info_dict["uploader"])
         secmul, dur, dur_arr = 1, 0, duration.split(":")
         for i in range(len(dur_arr) - 1, -1, -1):
             dur += int(float(dur_arr[i])) * secmul
             secmul *= 60
-        await m.edit("<b>↢ابشر الحين احملها ▬▬ . . .</b>")
+        await m.edit("<b>⇜ جـارِ التحميل ▬▬ . . .</b>")
         
         await message.reply_audio(
             audio=audio_file,
