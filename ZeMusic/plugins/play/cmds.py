@@ -17,17 +17,17 @@ async def zdatsr(client: Client, message: Message):
     usrnam = usr.username
     await message.reply_photo(
         photo=START_IMG_URL,
-        caption=f"""<b>-› مرحبا بك</b> {message.from_user.mention} .\n\n<b>-› جميع اوامر البوت موجودة بالقائمة هذي ، اضغط الازرار الي تحت واستكشف ياوحش\n</b>""",
+        caption=f"""<b>↠ مرحبا بك</b> {message.from_user.mention} .\n\n<b>↠ جميع اوامر البوت موجودة بالقائمة هذي ، اضغط الازرار الي تحت واستكشف ياوحش\n</b>""",
         reply_markup=InlineKeyboardMarkup(
             [
                 [
                     InlineKeyboardButton(
-                        "🍻 اوامــر التشغيــل ", callback_data="zzzll"),
+                        " اوامــر التشغيــل ", callback_data="zzzll"),
                 ],[
                     InlineKeyboardButton(
-                        "🍻 اوامـر القنـاة ", callback_data="zzzch"),
+                        " اوامـر القنـاة ", callback_data="zzzch"),
                     InlineKeyboardButton(
-                        "🍻 اوامـر الادمـن ", callback_data="zzzad"),
+                        " اوامـر الادمـن ", callback_data="zzzad"),
                 ],[
                     InlineKeyboardButton(
                         text=config.CHANNEL_NAME, url=config.CHANNEL_LINK),
