@@ -32,7 +32,7 @@ async def strcall(client, message):
 
         # إضافة زر شفاف في الأسفل
         inline_keyboard = InlineKeyboardMarkup([
-            [InlineKeyboardButton("تحديثات السورس 🍻", url=config.SUPPORT_CHAT)],
+            [InlineKeyboardButton("sᴏᴜʀᴄᴇ ᴀʟɪᴄᴇ", url=config.SUPPORT_CHAT)],
         ])      
 
         await message.reply(f"{text}", reply_markup=inline_keyboard)
@@ -43,7 +43,7 @@ async def strcall(client, message):
     except TelegramServerError:
         await message.reply(f"- حدث خطأ.")
     except AlreadyJoinedError:
-        text = " الحلوين الي في المكالمه🍻 :\n\n"
+        text = " الحلوين الي في المكالمه ↢  :\n\n"
         participants = await assistant.get_participants(message.chat.id)
         k = 0
         for participant in participants:
@@ -59,6 +59,6 @@ async def strcall(client, message):
 
         # إضافة زر شفاف في الأسفل
         inline_keyboard = InlineKeyboardMarkup([
-            [InlineKeyboardButton("تحديثات السورس🍻", url=config.SUPPORT_CHAT)],
+            [InlineKeyboardButton("sᴏᴜʀᴄᴇ ᴀʟɪᴄᴇ", url=config.SUPPORT_CHAT)],
         ])
         await message.reply(f"{text}", reply_markup=inline_keyboard)
