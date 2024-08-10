@@ -1,8 +1,12 @@
+#
+#
+#
+#
 from pyrogram import filters
 from pyrogram.types import InlineKeyboardMarkup, Message
 
 import config
-from ZeMusic import YouTube, app
+from ZeMusic import YouTube, app, YTB
 from ZeMusic.core.call import Mody
 from ZeMusic.misc import db
 from ZeMusic.utils.database import get_loop
@@ -11,17 +15,21 @@ from ZeMusic.utils.inline import close_markup, stream_markup
 from ZeMusic.utils.stream.autoclear import auto_clean
 from ZeMusic.utils.thumbnails import get_thumb
 from config import BANNED_USERS
+from strings import get_string
+from strings.filters import command
 
 
-@app.on_message(
-    filters.command(["skip","تخطي", "cskip", "next", "cnext", "التالي"], "")  & ~BANNED_USERS
-)
+@app.on_message(filters.command(["next","cskip","skip"]) & filters.group & ~BANNED_USERS)
+@app.on_message(command(["تخطي","التالي"]) & filters.group & ~BANNED_USERS)
 @AdminRightsCheck
 async def skip(cli, message: Message, _, chat_id):
+    if " " in message.text:
+        return
     if not len(message.command) < 2:
         loop = await get_loop(chat_id)
         if loop != 0:
             return await message.reply_text(_["admin_8"])
+        user_mention = message.from_user.mention if message.from_user else "المشـرف"
         state = message.text.split(None, 1)[1].strip()
         if state.isnumeric():
             state = int(state)
@@ -43,7 +51,7 @@ async def skip(cli, message: Message, _, chat_id):
                                 try:
                                     await message.reply_text(
                                         text=_["admin_6"].format(
-                                            message.from_user.mention,
+                                            (message.from_user.mention if message.from_user else message.chat.title),
                                             message.chat.title,
                                         ),
                                         reply_markup=close_markup(_),
@@ -70,7 +78,7 @@ async def skip(cli, message: Message, _, chat_id):
             if not check:
                 await message.reply_text(
                     text=_["admin_6"].format(
-                        message.from_user.mention, message.chat.title
+                        (message.from_user.mention if message.from_user else message.chat.title), message.chat.title
                     ),
                     reply_markup=close_markup(_),
                 )
@@ -82,7 +90,7 @@ async def skip(cli, message: Message, _, chat_id):
             try:
                 await message.reply_text(
                     text=_["admin_6"].format(
-                        message.from_user.mention, message.chat.title
+                        (message.from_user.mention if message.from_user else message.chat.title), message.chat.title
                     ),
                     reply_markup=close_markup(_),
                 )
@@ -138,7 +146,15 @@ async def skip(cli, message: Message, _, chat_id):
                 video=status,
             )
         except:
-            return await mystic.edit_text(_["call_6"])
+            try:
+                file_path, direct = await YTB.download(
+                    videoid,
+                    mystic,
+                    videoid=True,
+                    video=status,
+                )
+            except:
+                return await mystic.edit_text(_["call_6"])
         try:
             image = await YouTube.thumbnail(videoid, True)
         except:
