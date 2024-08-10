@@ -1,9 +1,13 @@
+#
+#
+#
+#
 import asyncio
 
 from pyrogram import filters
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
-from ZeMusic import YouTube, app
+from ZeMusic import YouTube, app, YTB
 from ZeMusic.core.call import Mody
 from ZeMusic.misc import SUDOERS, db
 from ZeMusic.utils.database import (
@@ -97,7 +101,7 @@ async def del_back_playlist(client, CallbackQuery, _):
             except:
                 pass
             command = counter
-            mention = "ᴜᴘᴠᴏᴛᴇs"
+            mention = "تصويت"
         else:
             if (
                 CallbackQuery.from_user.id
@@ -159,7 +163,7 @@ async def del_back_playlist(client, CallbackQuery, _):
     elif command == "Skip" or command == "Replay":
         check = db.get(chat_id)
         if command == "Skip":
-            txt = f"➻ sᴛʀᴇᴀᴍ sᴋɪᴩᴩᴇᴅ 🎄\n│ \n└ʙʏ : {mention} 🥀"
+            txt = f"⟡ تم التخطي \n\n⟡ بواسطة : {mention} "
             popped = None
             try:
                 popped = check.pop(0)
@@ -167,7 +171,7 @@ async def del_back_playlist(client, CallbackQuery, _):
                     await auto_clean(popped)
                 if not check:
                     await CallbackQuery.edit_message_text(
-                        f"➻ sᴛʀᴇᴀᴍ sᴋɪᴩᴩᴇᴅ 🎄\n│ \n└ʙʏ : {mention} 🥀"
+                        f"⟡ تم التخطي \n\n⟡ بواسطة : {mention} "
                     )
                     await CallbackQuery.message.reply_text(
                         text=_["admin_6"].format(
@@ -182,7 +186,7 @@ async def del_back_playlist(client, CallbackQuery, _):
             except:
                 try:
                     await CallbackQuery.edit_message_text(
-                        f"➻ sᴛʀᴇᴀᴍ sᴋɪᴩᴩᴇᴅ 🎄\n│ \n└ʙʏ : {mention} 🥀"
+                        f"⟡ تم التخطي \n\n⟡ بواسطة : {mention} "
                     )
                     await CallbackQuery.message.reply_text(
                         text=_["admin_6"].format(
@@ -194,7 +198,7 @@ async def del_back_playlist(client, CallbackQuery, _):
                 except:
                     return
         else:
-            txt = f"➻ sᴛʀᴇᴀᴍ ʀᴇ-ᴘʟᴀʏᴇᴅ 🎄\n│ \n└ʙʏ : {mention} 🥀"
+            txt = f"⟡ تم اعادة تشغيل البث\n\n⟡ بواسطة : {mention} "
         await CallbackQuery.answer()
         queued = check[0]["file"]
         title = (check[0]["title"]).title()
@@ -252,7 +256,15 @@ async def del_back_playlist(client, CallbackQuery, _):
                     video=status,
                 )
             except:
-                return await mystic.edit_text(_["call_6"])
+                try:
+                    file_path, direct = await YTB.download(
+                        videoid,
+                        mystic,
+                        videoid=True,
+                        video=status,
+                    )
+                except:
+                    return await mystic.edit_text(_["call_6"])
             try:
                 image = await YouTube.thumbnail(videoid, True)
             except:
