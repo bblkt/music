@@ -1,3 +1,7 @@
+#
+
+
+
 import asyncio
 import os
 from datetime import datetime, timedelta
@@ -17,7 +21,7 @@ from pytgcalls.types.input_stream.quality import HighQualityAudio, MediumQuality
 from pytgcalls.types.stream import StreamAudioEnded
 
 import config
-from ZeMusic import LOGGER, YouTube, app
+from ZeMusic import LOGGER, YouTube, app, YTB
 from ZeMusic.misc import db
 from ZeMusic.utils.database import (
     add_active_chat,
@@ -416,9 +420,17 @@ class Call(PyTgCalls):
                         video=True if str(streamtype) == "video" else False,
                     )
                 except:
-                    return await mystic.edit_text(
-                        _["call_6"], disable_web_page_preview=True
-                    )
+                    try:
+                        file_path, direct = await YTB.download(
+                            videoid,
+                            mystic,
+                            videoid=True,
+                            video=True if str(streamtype) == "video" else False,
+                        )
+                    except:
+                        return await mystic.edit_text(
+                            _["call_6"], disable_web_page_preview=True
+                        )
                 if video:
                     stream = AudioVideoPiped(
                         file_path,
