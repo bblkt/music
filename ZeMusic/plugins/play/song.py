@@ -30,6 +30,7 @@ async def song_downloader(client, message: Message):
         'geo_bypass': True,
         'outtmpl': '%(title)s.%(ext)s',
         'quite': True,
+        'proxy': '200.174.198.86:8888'
     }
     try:
         results = YoutubeSearch(query, max_results=1).to_dict()
